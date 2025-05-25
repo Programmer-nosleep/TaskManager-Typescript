@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import PrivateRoute from './ProtectedRouter';
+import PrivateRouter from './PrivateRouter';
 
 import Login from '../views/auth/Login'
 import SignUp from '../views/auth/SignUp'
@@ -17,16 +17,16 @@ export default function AppRouter() {
     <Router>
       <Routes>
         <Route path='/' element={<Login />}/>
-        <Route path='/sigup' element={<SignUp />}></Route>
+        <Route path='/signup' element={<SignUp />}></Route>
 
-        <Route element={<PrivateRoute allowedRoles={["admin"]} />} >
+        <Route element={<PrivateRouter allowedRoles={["admin"]} />} >
           <Route path='/admin/dashboard' element={<DashboardAdmin />}/>
           <Route path='/admin/create-task' element={<CreateTask />}/>
           <Route path='/admin/manage-user' element={<ManageUser />}/>
           <Route path='/admin/manage-task' element={<ManageTasks />}/>
         </Route>
 
-        <Route element={<PrivateRoute allowedRoles={["users"] } />}>
+        <Route element={<PrivateRouter allowedRoles={["users"] } />}>
           <Route path='/dashboard' element={<DashboardUser />} />
           <Route path='/task' element={<MyTasks />} />
           <Route path='/task-detail/:id' element={<ViewTaskDetails />}/>
