@@ -3,6 +3,7 @@ require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
 const path = require("path")
+const connect = require("./config/db")
 
 const app = express();
 
@@ -15,19 +16,22 @@ app.use(
   })
 )
 
+// connect database
+connectDB()
+
 // middleware
-app.use(express.json());
+app.use(express.json())
 
 // routes
-const routes: [string, express.Router][] = [
-  ["/api/auth", AuthRoutes],
-  ["/api/users", userRoutes],
-  ["/api/tasks", taskRoutes],
-  ["/api/reports", reportRoutes]
-];
+const routeMap: Record<string, express.Router> = {
+  "/api/auth": AuthRoutes,
+  "/api/users": userRoutes,
+  "/api/tasks": taskRoutes,
+  "/api/reports": reportRoutes
+};
 
-routes.forEach(([path, handler]) => {
-  app.use(path, handler);
+Object.entries(routeMap).forEach(([path, router]) => {
+  app.use(path, router);
 });
 
 // start server
