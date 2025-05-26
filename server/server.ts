@@ -19,11 +19,11 @@ app.use(
   })
 );
 
-// Connect database
-connectDB();
 
 // Middleware JSON parser
 app.use(express.json());
+// Connect database
+connectDB();
 
 // Routes array with path and router handler
 const routes: [string, express.Router][] = [
