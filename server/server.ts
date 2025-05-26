@@ -19,9 +19,9 @@ app.use(
   })
 );
 
-
 // Middleware JSON parser
 app.use(express.json());
+
 // Connect database
 connectDB();
 
