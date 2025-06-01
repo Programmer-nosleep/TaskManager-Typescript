@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import User from "../models/User";
 
-// extend Request agar bisa akses req.user
 interface AuthRequest extends Request {
   user?: any;
 }
@@ -19,6 +18,7 @@ export const protect = async (
       token = token.split(" ")[1];
 
       const secret = process.env.JWT_SECRET;
+
       if (!secret) {
         res.status(500).json({ message: "JWT_SECRET not set" });
         return;

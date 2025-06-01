@@ -1,5 +1,4 @@
-import { RequestHandler,Router } from "express";
-
+import { RequestHandler, Router } from "express";
 import { protect, adminOnly } from "../middleware/AuthMiddleware";
 import { getUsers, getUserById, deleteUser } from "../controllers/userController";
 
@@ -13,30 +12,30 @@ interface Route {
   handler: RequestHandler | RequestHandler[];
 }
 
-const UserRoutes : Route[] = [
+const UserRoutes: Route[] = [
   {
     method: "get",
     path: "/",
-    role: adminOnly,
+    // role: adminOnly,
     protect: protect,
-    handler: getUsers
+    handler: getUsers,
   },
   {
     method: "get",
     path: "/:id",
-    // role: adminOnly,
     protect: protect,
-    handler: getUserById
+    handler: getUserById,
   },
   {
     method: "delete",
     path: "/:id",
     role: adminOnly,
     protect: protect,
-    handler: deleteUser
-  }
+    handler: deleteUser,
+  },
 ];
 
+// Register each route
 UserRoutes.forEach(({ method, path, protect, role, handler }) => {
   const handlers: RequestHandler[] = [];
 
@@ -51,5 +50,4 @@ UserRoutes.forEach(({ method, path, protect, role, handler }) => {
   router[method](path, ...handlers);
 });
 
-
-export default UserRoutes;
+export default router; 
