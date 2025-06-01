@@ -21,9 +21,13 @@ const generateToken = ({ id }: GenerateTokenPayload): string => {
   })
 }
 
-// Register User
+/*
+  @desc   Register user
+  @route  POST /api/auth/profile
+  @access Private (Require JWT)
+*/
 export const RegisterUser = async (req: Request, res: Response): Promise<void> => {
-  const { name, email, password } = req.body;
+  const { name, email, password, profileImgUrl, adminInviteToken } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
@@ -32,22 +36,33 @@ export const RegisterUser = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let role: string = "member"
+    if (adminInviteToken == process.env.ADMIN_INVITE_TOKEN) {
+      role = "admin"
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
     const newUser = await User.create({
       name,
       email,
       password: hashedPassword,
-    });
+      profileImgUrl,
+      role
+    })
 
-    const token = generateToken({ id: newUser._id });
+    const token = generateToken({ id: newUser.id });
 
     res.status(201).json({
       message: "User registered successfully",
       user: {
-        id: newUser._id,
+        id: newUser.id,
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
+        profileImageUrl: newUser.profileImgUrl,
+        token: generateToken(newUser.id)
       },
       token,
     });
@@ -56,7 +71,11 @@ export const RegisterUser = async (req: Request, res: Response): Promise<void> =
   }
 }
 
-// Login User
+/*
+  @desc   Login user profile
+  @route  POST /api/auth/profile
+  @access Public
+*/
 export const LoginUser = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
@@ -68,32 +87,89 @@ export const LoginUser = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const token = generateToken({ id: user._id });
+    // compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      res.status(401).json({message: "invalid email or password"});
+    }
 
+    const token = generateToken({ id: user.id });
+
+    // return user data with jwt??
     res.status(200).json({
       message: "Login successful",
       user: {
-        id: user._id,
+        id: user.id,
         name: user.name,
         email: user.email,
         role: user.role,
       },
       token,
     });
-  } catch (error: any) {
-    res.status(500).json({ message: error.message || "Server error" });
+  } catch (err: any) {
+    res.status(500).json({ message: "server error", error: err.message });
   }
 }
 
 // Profile (dummy handler untuk sekarang)
-export const ProfileUser = async (req: Request, res: Response): Promise<void> => {
-  res.status(200).json({ message: "Profile route hit" });
-};
+// export const ProfileUser = async (req: Request, res: Response): Promise<void> => {
+//   res.status(200).json({ message: "Profile route hit" });
+// };
 
+/*
+  @desc   Get user profile
+  @route  GET /api/auth/profile
+  @access Private (Require JWT)
+*/
 export const getUserProfile = async (req: Request, res: Response): Promise<void> => {
-
+  try {
+   const user = await User.findById(req.user.id).select("-password");
+   if (!user) {
+    res.status(404).json({message: "user not found"});
+   } 
+   res.json(user);
+  } catch (err: any) {
+    res.status(500).json({ message: "server error", error: err.message });
+  }
 }
 
-export const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
+/*
+  @desc   Update user profile
+  @route  PUT /api/auth/profile
+  @access Private (Require JWT)
+*/
 
+export const updateUserProfile = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      res.status(404).json({message: "user not found"});
+      return;
+    }
+
+    user.name = req.body.name || user?.name;
+    user.email = req.body.email || user?.email;
+
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(req.body.password, salt);
+    }
+
+    const updateUser = await user?.save();
+
+    res.status(200).json({
+      message: "Login successful",
+      user: {
+        id: updateUser.id,
+        name: updateUser.name,
+        email: updateUser.email,
+        role: updateUser.role,
+        token: generateToken(updateUser.id)
+      },
+    }); 
+
+  } catch (err: any) {
+    res.status(500).json({ message: "server error", error: err.message })
+  }
 }

@@ -1,6 +1,7 @@
 import { Router, RequestHandler } from "express";
-import { LoginUser, RegisterUser, ProfileUser, updateUserProfile, getUserProfile } from "../controllers/AuthController";
-import { protect } from "../middleware/AuthMiddleware"
+import { LoginUser, RegisterUser, updateUserProfile, getUserProfile } from "../controllers/AuthController";
+import { protect } from "../middleware/AuthMiddleware";
+import { upload } from "../middleware/uploadMiddleware";
 
 const router = Router();
 
@@ -8,9 +9,16 @@ interface RouteConfig {
   method: "get" | "post" | "put" | "delete";
   path: string;
   protect?: RequestHandler;
-  handler: RequestHandler;
+  handler: RequestHandler | RequestHandler[];
 }
 
+// Combine middleware and handler into one array if needed
+const combineHandler = (
+  middlewares: RequestHandler[] = [],
+  handler: RequestHandler
+): RequestHandler[] => [...middlewares, handler];
+
+// All routes
 const routes: RouteConfig[] = [
   {
     method: "post",
@@ -21,11 +29,6 @@ const routes: RouteConfig[] = [
     method: "post",
     path: "/register",
     handler: RegisterUser,
-  },
-  {
-    method: "post",
-    path: "/profile",
-    handler: ProfileUser,
   },
   {
     method: "put",
@@ -39,15 +42,38 @@ const routes: RouteConfig[] = [
     protect: protect,
     handler: getUserProfile,
   },
+  {
+    method: "post",
+    path: "/upload-image",
+    handler: combineHandler([
+      upload.single("image")
+    ], (req, res): void => {
+      if (!req.file) {
+        res.status(400).json({ message: "No file uploaded" });
+        return;
+      }
+      const imgUrl = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+      res.status(200).json({ imgUrl });
+    }),    
+  }
 ];
 
-// Daftarkan semua route ke router, dengan middleware protect jika ada
+// Register routes
 routes.forEach(({ method, path, protect, handler }) => {
-  if (protect) {
-    router[method](path, protect, handler);
+  if (Array.isArray(handler)) {
+    if (protect) {
+      router[method](path, protect, ...handler);
+    } else {
+      router[method](path, ...handler);
+    }
   } else {
-    router[method](path, handler);
+    if (protect) {
+      router[method](path, protect, handler);
+    } else {
+      router[method](path, handler);
+    }
   }
 });
 
 export default router;
+

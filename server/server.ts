@@ -4,7 +4,7 @@ import cors from "cors";
 import connectDB from "./config/db";
 
 import AuthRoutes from "./routes/AuthRoutes";
-// import UserRoutes from "./routes/UserRoutes";
+import UserRoutes from "./routes/userRoutes";
 // import TaskRoutes from "./routes/TaskRoutes";
 // import ReportRoutes from "./routes/ReportRoutes";
 
@@ -28,7 +28,7 @@ connectDB();
 // Routes array with path and router handler
 const routes: [string, express.Router][] = [
   ["/api/auth", AuthRoutes],
-  // ["/api/users", UserRoutes],
+  ["/api/users", UserRoutes],
   // ["/api/tasks", TaskRoutes],
   // ["/api/reports", ReportRoutes],
 ];
