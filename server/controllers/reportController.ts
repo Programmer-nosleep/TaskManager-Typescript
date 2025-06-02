@@ -9,7 +9,6 @@ import excelJS from "exceljs";
   @route GET /api/reports/export/tasks
   @access Private (Admin)
 */
-
 export const exportTasksReport: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const tasks = await Task.find().populate("assignedTo", "name email");
@@ -60,7 +59,6 @@ export const exportTasksReport: RequestHandler = async (req: Request, res: Respo
   @route GET /api/reports/export/users
   @access Private (Admin)
 */
-
 export const exportUserReport: RequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await User.find().select("name email _id").lean();
