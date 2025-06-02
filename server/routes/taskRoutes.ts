@@ -22,7 +22,7 @@ const TaskRoutes: Route[] = [
   },
   {
     method: "get",
-    path: "/user-dahboard-data",
+    path: "/user-dashboard-data",
     protect: protect,
     handler: getUserDashboardData,
   },
