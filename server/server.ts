@@ -6,7 +6,7 @@ import connectDB from "./config/db";
 import AuthRoutes from "./routes/AuthRoutes";
 import UserRoutes from "./routes/userRoutes";
 import TaskRoutes from "./routes/taskRoutes";
-// import ReportRoutes from "./routes/report";
+import ReportRoutes from "./routes/report";
 
 const app: Application = express();
 
@@ -30,7 +30,7 @@ const routes: [string, express.Router][] = [
   ["/api/auth", AuthRoutes],
   ["/api/users", UserRoutes],
   ["/api/tasks", TaskRoutes],
-  // ["/api/reports", ReportRoutes],
+  ["/api/reports", ReportRoutes],
 ];
 
 // Register routes
