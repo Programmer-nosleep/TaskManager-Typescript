@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 import Form from '../../components/Form';
 import AuthLayout from '../../components/layout/AuthLayout'
@@ -15,17 +16,29 @@ export default function SignUp() {
   const [adminInviteToken, setAdminInviteToken] = useState("");
 
   const [error, setError] = useState("");
+  const [isShaking, setIsShaking] = useState(false);
+
+  const triggerError = (message: string) => {
+    setError(message);
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 400);
+  };
 
   const handleSignUp = async (e: any): Promise<void> => {
     e.preventDefault();
 
     if (!fullname) {
-      setError("Please ");
+      triggerError("Please enter fullname");
       return;
     }
 
     if (!password) {
-      setError("Please");
+      triggerError("Please enter password");
+      return;
+    }
+
+    if (!email) {
+      triggerError("Please enter email account");
       return;
     }
 
@@ -68,17 +81,28 @@ export default function SignUp() {
               value={adminInviteToken}
               onChange={({ target }) => setAdminInviteToken(target.value)}
               label="Admin Invite Token"
-              placeholder="Optional"
+              placeholder="6 Digit Code"
               type="text"
             />
           </div>
 
           {error && (
-            <p className="text-sm text-red-500 mt-4">{error}</p>
+            <p
+              className={`text-sm text-red-500 mt-4 ${isShaking ? 'shake' : ''}`}
+            >
+              {error}
+            </p>
           )}
+
           <Button type='submit'>
            {buttonText.toLowerCase() === "sign up" ? buttonText.toUpperCase() : buttonText} 
           </Button>
+          <p className='text-[13px] text-slate-800 mt-3'>
+            Already an account? {" "}
+            <Link className="font-medium text-primary underline" to="/signup">
+              Login 
+            </Link>
+          </p>
         </Form>
       </div>
     </AuthLayout>

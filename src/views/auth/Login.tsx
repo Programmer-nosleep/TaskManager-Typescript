@@ -12,7 +12,15 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [buttonText, setButtonText] = useState("login");
+
   const [error, setError] = useState("");
+  const [isShaking, setIsShaking] = useState(false);
+
+  const triggerError = (message: string) => {
+    setError(message);
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 400);
+  };
 
   const navigate = useNavigate();
 
@@ -20,12 +28,12 @@ export default function Login() {
     e.preventDefault(); 
 
     if (!validateEmail(email)) {
-      setError("Please enter a valid email address.");
+      triggerError("Please enter a valid email address.");
       return;
     }
 
     if (!password) {
-      setError("Please enter the password");
+      triggerError("Please enter the password");
       return;
     }
 
@@ -59,7 +67,13 @@ export default function Login() {
               type="password"
             />
 
-          {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
+          {error && (
+            <p
+              className={`text-sm text-red-500 mt-4 ${isShaking ? 'shake' : ''}`}
+            >
+              {error}
+            </p>
+          )}
           <Button type='submit'>
            {buttonText.toLowerCase() === "login" ? buttonText.toUpperCase() : buttonText} 
           </Button>
