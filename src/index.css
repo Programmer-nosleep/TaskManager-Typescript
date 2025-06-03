@@ -25,3 +25,14 @@
 .btn-primary {
   @apply w-full text-sm font-medium p-3 text-white bg-primary shadow-lg shadow-purple-600/5 rounded-md my-1 hover:bg-blue-600/15 hover:text-blue-600 transition ease-linear cursor-pointer;
 }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
+.shake {
+  animation: shake 0.4s ease-in-out;
+}
