@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from "express";
-import { protect, adminOnly } from "../middleware/AuthMiddleware";
+import { Protect, adminOnly } from "../middleware/AuthMiddleware";
 import { getUsers, getUserById, deleteUser } from "../controllers/userController";
 
 const router = Router();
@@ -17,20 +17,20 @@ const UserRoutes: Route[] = [
     method: "get",
     path: "/",
     // role: adminOnly,
-    protect: protect,
+    protect: Protect,
     handler: getUsers,
   },
   {
     method: "get",
     path: "/:id",
-    protect: protect,
+    protect: Protect,
     handler: getUserById,
   },
   {
     method: "delete",
     path: "/:id",
     role: adminOnly,
-    protect: protect,
+    protect: Protect,
     handler: deleteUser,
   },
 ];

@@ -1,5 +1,5 @@
 import { Router, RequestHandler } from "express";
-import { protect, adminOnly } from "../middleware/AuthMiddleware";
+import { Protect, adminOnly } from "../middleware/AuthMiddleware";
 
 import { getDashboardData, getUserDashboardData, getTask, getTaskById, createTask, updateTask, deleteTask, updateTaskStatus, updateTaskChecklist } from "../controllers/taskController";
 
@@ -17,55 +17,55 @@ const TaskRoutes: Route[] = [
   {
     method: "get",
     path: "/dashboard-data",
-    protect: protect,
+    protect: Protect,
     handler: getDashboardData,
   },
   {
     method: "get",
     path: "/user-dashboard-data",
-    protect: protect,
+    protect: Protect,
     handler: getUserDashboardData,
   },
   {
     method: "get",
     path: "/",
-    protect: protect,
+    protect: Protect,
     handler: getTask,
   },
   {
     method: "get",
     path: "/:id",
-    protect: protect,
+    protect: Protect,
     handler: getTaskById
   },
   {
     method: "post",
     path: "/",
-    protect: protect,
+    protect: Protect,
     handler: createTask
   },
   {
     method: "put",
     path: "/:id",
-    protect: protect,
+    protect: Protect,
     handler: updateTask
   },
   {
     method: "delete",
     path: "/:id",
-    protect: protect,
+    protect: Protect,
     handler: deleteTask
   },
   {
     method: "put",
     path: "/:id/status",
-    protect: protect,
+    protect: Protect,
     handler: updateTaskStatus
   },
   {
     method: "put",
     path: "/:id/todo",
-    protect: protect,
+    protect: Protect,
     handler: updateTaskChecklist
   }
 ];
