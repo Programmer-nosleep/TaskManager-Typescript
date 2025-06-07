@@ -12,7 +12,7 @@ export default function Input({ label, type = "text", ...props }: InputProps) {
   const actualType = isPasswordType ? (showPassword ? "text" : "password") : type;
 
   return (
-    <div className="mb-4">
+    <div className="">
       {label && <label className="text-sm text-slate-800 block mb-1">{label}</label>}
       <div className="input-box flex items-center border px-2 py-1 rounded">
         <input

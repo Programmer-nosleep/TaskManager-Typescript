@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from "express";
-import { protect, adminOnly } from "../middleware/AuthMiddleware";
+import { Protect, adminOnly } from "../middleware/AuthMiddleware";
 
 import { exportTasksReport, exportUserReport } from "../controllers/reportController";
 
@@ -18,14 +18,14 @@ const ReportRoutes: Route[] = [
     method: "get",
     path: "/export/tasks",
     role: adminOnly,
-    protect: protect,
+    protect: Protect,
     handler: exportTasksReport,
   },
   {
     method: "get",
     path: "/export/users",
     role: adminOnly,
-    protect: protect,
+    protect: Protect,
     handler: exportUserReport,
   }
 ];

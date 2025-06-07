@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
+// import axios from "axios";
+
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import AuthLayout from '../../components/layout/AuthLayout'
+import AuthLayout from '../../components/layout/AuthLayout';
 
+import axiosInstance from '../../utils/axiosInstance';
 import { validateEmail } from '../../utils/helper';
+import { API_PATHS } from '../../utils/ApiPaths';
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -38,7 +42,36 @@ export default function Login() {
     }
 
     setError("");
-  }
+    setButtonText("Logging in...");
+
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password
+      });
+
+      const { token, role } = response.data;
+
+      if (token) {
+        localStorage.setItem("token", token);
+
+        if (role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/user/dashboard");
+        }
+      }
+    } catch (err: any) {
+      if (err.response && err.response.data.message) {
+        triggerError(err.response.data.message);
+      } else {
+        triggerError("Something went wrong. Please try again.");
+      }
+    } finally {
+      setButtonText("login");
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setButtonText(value);

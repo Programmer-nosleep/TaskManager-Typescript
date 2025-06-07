@@ -1,7 +1,7 @@
 import { Router, RequestHandler } from "express";
 import { LoginUser, RegisterUser, updateUserProfile, getUserProfile } from "../controllers/AuthController";
-import { protect } from "../middleware/AuthMiddleware";
-import { upload } from "../middleware/uploadMiddleware";
+import { Protect } from "../middleware/AuthMiddleware";
+import { Upload } from "../middleware/UploadMiddleware";
 
 const router = Router();
 
@@ -33,20 +33,20 @@ const routes: RouteConfig[] = [
   {
     method: "put",
     path: "/profile",
-    protect: protect,
+    protect: Protect,
     handler: updateUserProfile,
   },
   {
     method: "get",
     path: "/profile",
-    protect: protect,
+    protect: Protect,
     handler: getUserProfile,
   },
   {
     method: "post",
     path: "/upload-image",
     handler: combineHandler([
-      upload.single("image")
+      Upload.single("image")
     ], (req, res): void => {
       if (!req.file) {
         res.status(400).json({ message: "No file uploaded" });

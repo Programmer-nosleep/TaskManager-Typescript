@@ -35,7 +35,7 @@ const fileFilter = (
 };
 
 // Export konfigurasi upload
-export const upload = multer({
+export const Upload = multer({
   storage,
   fileFilter,
   limits: {

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 
 import Form from '../../components/Form';
-import AuthLayout from '../../components/layout/AuthLayout'
+import AuthLayout from '../../components/layout/AuthLayout';
 import ProfilePhotoSelector from '../../components/inputs/ProfilePhotoSelector';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
@@ -43,6 +43,12 @@ export default function SignUp() {
     }
 
     setError("");
+
+    try {
+      
+    } catch (err: any) {
+      
+    }
   }
 
   return (
@@ -95,11 +101,11 @@ export default function SignUp() {
           )}
 
           <Button type='submit'>
-           {buttonText.toLowerCase() === "sign up" ? buttonText.toUpperCase() : buttonText} 
+           { buttonText.toLowerCase() === "sign up" ? buttonText.toUpperCase() : buttonText } 
           </Button>
           <p className='text-[13px] text-slate-800 mt-3'>
             Already an account? {" "}
-            <Link className="font-medium text-primary underline" to="/signup">
+            <Link className="font-medium text-primary underline" to="/">
               Login 
             </Link>
           </p>
