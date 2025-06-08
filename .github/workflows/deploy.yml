@@ -29,7 +29,7 @@ jobs:
           node-version: lts/*
 
       - name: Install step
-        run: "deno install --npm --allow-scripts && cd server && deno install --npm --allow-scripts"
+        run: "npm install && cd server && deno install --npm --allow-scripts"
 
       - name: Build step
         run: "deno run build"
