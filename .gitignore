@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+compass-connections.json
+
 # Editor directories and files
 .cache/*
 .vscode/*
