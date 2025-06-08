@@ -20,7 +20,10 @@ app.use(
 );
 
 // Middleware JSON parser
-app.use(express.json());
+app.use(express.static("../dist"));
+app.get("*", (req, res) => {
+  res.sendFile("../dist/index.html");
+});
 
 // Connect database
 connectDB();
