@@ -27,7 +27,7 @@ export default function AppRouter() {
         </Route>
 
         <Route element={<PrivateRouter allowedRoles={["users"] } />}>
-          <Route path='/dashboard' element={<DashboardUser />} />
+          <Route path='/user/dashboard' element={<DashboardUser />} />
           <Route path='/task' element={<MyTasks />} />
           <Route path='/task-detail/:id' element={<ViewTaskDetails />}/>
           {/* 

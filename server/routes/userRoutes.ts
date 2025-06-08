@@ -15,8 +15,8 @@ interface Route {
 const UserRoutes: Route[] = [
   {
     method: "get",
-    path: "/",
-    // role: adminOnly,
+    path: "/login",
+    role: adminOnly,
     protect: Protect,
     handler: getUsers,
   },

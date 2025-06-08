@@ -50,16 +50,17 @@ export default function Login() {
         password
       });
 
-      const { token, role } = response.data;
+      const { token, user } = response.data;
 
       if (token) {
         localStorage.setItem("token", token);
 
-        if (role === "admin") {
-          navigate("/admin/dashboard");
+        if (user.role === "admin") {
+          navigate("/admin/dashboard"); 
         } else {
           navigate("/user/dashboard");
         }
+        // navigate("/dashboard");
       }
     } catch (err: any) {
       if (err.response && err.response.data.message) {
