@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
-// import axios from "axios";
-
 import Form from '../../components/Form';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
