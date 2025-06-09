@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 
 import Form from '../../components/Form';
@@ -9,6 +9,7 @@ import AuthLayout from '../../components/layout/AuthLayout';
 import axiosInstance from '../../utils/axiosInstance';
 import { validateEmail } from '../../utils/helper';
 import { API_PATHS } from '../../utils/ApiPaths';
+import { UserContext } from '../../context/userContext';
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -24,6 +25,12 @@ export default function Login() {
     setTimeout(() => setIsShaking(false), 400);
   };
 
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("UserContext must be used within a UserProvider");
+  }
+  const { updateUser } = context;
+  
   const navigate = useNavigate();
 
   const handleLogin = async (e: any): Promise<void> => {
@@ -53,6 +60,7 @@ export default function Login() {
       if (token) {
         localStorage.setItem("token", token);
 
+        updateUser(response.data);
         if (user.role === "admin") {
           navigate("/admin/dashboard"); 
         } else {

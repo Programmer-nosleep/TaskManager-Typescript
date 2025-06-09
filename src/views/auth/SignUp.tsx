@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 
 import Form from '../../components/Form';
 import AuthLayout from '../../components/layout/AuthLayout';
 import ProfilePhotoSelector from '../../components/inputs/ProfilePhotoSelector';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import axiosInstance from '../../utils/axiosInstance';
+import { API_PATHS } from '../../utils/ApiPaths';
+import { UserContext } from '../../context/userContext';
+import uploadImage from '../../utils/upload';
 
 export default function SignUp() {
   const [profilePic, setProfilePic] = useState<File | null>(null);
@@ -15,6 +19,13 @@ export default function SignUp() {
   const [buttonText, setButtonText] = useState("sign up");
   const [adminInviteToken, setAdminInviteToken] = useState("");
 
+  const navigate = useNavigate();
+
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("UserContext must be used within a UserProvider");
+  }
+  const { updateUser } = context;
   const [error, setError] = useState("");
   const [isShaking, setIsShaking] = useState(false);
 
@@ -26,6 +37,8 @@ export default function SignUp() {
 
   const handleSignUp = async (e: any): Promise<void> => {
     e.preventDefault();
+
+    let setProfilePicture = '';
 
     if (!fullname) {
       triggerError("Please enter fullname");
@@ -45,9 +58,40 @@ export default function SignUp() {
     setError("");
 
     try {
-      
+      if (profilePic) {
+        const imgUploadRes = await uploadImage(profilePic);
+        setProfilePicture = imgUploadRes.imageUrl || "";
+      }
+
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {
+        name: fullname,
+        email,
+        password,
+        setProfilePicture,
+        adminInviteToken
+      });
+
+      const { token, user } = response.data;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        updateUser(response.data);
+
+        if (user.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/user/dashboard"); 
+        }
+      }
+     
     } catch (err: any) {
-      
+      if (err.response && err.response.data.message) {
+        triggerError(err.response.data.message);
+      } else {
+        triggerError("Something went wrong. Please try again.");
+      }
+    } finally {
+      setButtonText("sign up");
     }
   }
 

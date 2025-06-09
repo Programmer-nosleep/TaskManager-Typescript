@@ -68,11 +68,13 @@ export default function ProfilePhotoSelector({
         </div>
       ) : (
         <div className="relative">
-          <img
-            src={previewURL}
-            alt="Selected profile photo preview"
-            className="w-20 h-20 rounded-full object-cover"
-          />
+          {previewURL && (
+            <img
+              src={previewURL}
+              alt="Selected profile photo preview"
+              className="w-20 h-20 rounded-full object-cover"
+            />
+          )}
           <button
             type="button"
             onClick={handleRemoveImage}
