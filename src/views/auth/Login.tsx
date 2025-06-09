@@ -108,6 +108,7 @@ export default function Login() {
               {error}
             </p>
           )}
+
           <Button type='submit'>
            {buttonText.toLowerCase() === "login" ? buttonText.toUpperCase() : buttonText} 
           </Button>

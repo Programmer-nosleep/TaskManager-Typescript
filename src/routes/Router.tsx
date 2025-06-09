@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import PrivateRouter from './PrivateRouter';
 
+import Index from "../views/index"
 import Login from '../views/auth/Login'
 import SignUp from '../views/auth/SignUp'
 import DashboardAdmin from '../views/Admin/DashboardAdmin'
@@ -16,6 +17,7 @@ export default function AppRouter() {
   return (
     <Router>
       <Routes>
+        <Route path='/' element={ <Index /> }/>
         <Route path='/login' element={<Login />}/>
         <Route path='/signup' element={<SignUp />}></Route>
 
