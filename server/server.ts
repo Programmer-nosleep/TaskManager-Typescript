@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express, { Application } from "express";
+import path from "path";
 import cors from "cors";
 import connectDB from "./config/db";
 
@@ -32,6 +33,9 @@ const routes: [string, express.Router][] = [
   ["/api/tasks", TaskRoutes],
   ["/api/reports", ReportRoutes],
 ];
+
+// server uploads
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Register routes
 routes.forEach(([path, handler]) => {
