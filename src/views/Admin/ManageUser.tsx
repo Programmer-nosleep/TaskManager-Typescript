@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import DashboardLayout from '../../components/layout/DashboardLayout';
 
 export default function ManageUser() {
   return (
-    <div>
-
-    </div>
+    <DashboardLayout activeMenu='ManageUser'>
+      <div>
+        Manage User
+      </div>
+    </DashboardLayout>
   )
 }

@@ -1,9 +1,12 @@
-import React from "react"
+import React from "react";
+import DashboardLayout from "../../components/layout/DashboardLayout";
 
 export default function CreateTask() {
   return (
-    <div>
-
-    </div>
+    <DashboardLayout activeMenu='CreateTasks'>
+      <div>
+        Create Tasks
+      </div>
+    </DashboardLayout>
   )
 }

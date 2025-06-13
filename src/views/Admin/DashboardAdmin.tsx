@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { FiCheckSquare } from 'react-icons/fi';
 import moment  from 'moment';
 
 import axiosInstance from '../../utils/axiosInstance';
@@ -13,10 +14,7 @@ import { API_PATHS } from '../../utils/ApiPaths';
 
 interface DashboardData {
   charts: {
-    taskDistribution: {
-      All: number;
-      [key: string]: number;
-    };
+    taskDistribution: Record<string, number>; 
     [key: string]: any;
   };
   [key: string]: any;
@@ -35,6 +33,8 @@ export default function DashboardAdmin() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [pieChartData, setPieChartData] = useState([]);
   const [barChartData, setBarChartData] = useState([]);
+
+  const taskData = dashboardData?.charts?.taskDistribution || {};
 
   const getDashboardData = async () => {
     try {
@@ -57,6 +57,7 @@ export default function DashboardAdmin() {
     };
   }, []);
 
+
   return (
     <DashboardLayout activeMenu='Dashboard'>
       <div className='card my-5'>
@@ -72,9 +73,28 @@ export default function DashboardAdmin() {
 
         <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5'>
           <InfoCard
-             label="Total Tasks"
-             value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.All || 0)}
-             color="bg-primary"
+            icon={<FiCheckSquare size={20} className="text-white" />}
+            label="Pending Tasks"
+            value={addThousandsSeparator(taskData.Pending || 0)}
+            color="bg-yellow-500"
+          />
+          <InfoCard
+            icon={<FiCheckSquare size={20} className="text-white" />}
+            label="In Progress Tasks"
+            value={addThousandsSeparator(taskData.InProgress || 0)}
+            color="bg-orange-500"
+          />
+          <InfoCard
+            icon={<FiCheckSquare size={20} className="text-white" />}
+            label="Completed Tasks"
+            value={addThousandsSeparator(taskData.Completed || 0)}
+            color="bg-green-500"
+          />
+          <InfoCard
+            icon={<FiCheckSquare size={20} className="text-white" />}
+            label="Total Tasks"
+            value={addThousandsSeparator(taskData.All || 0)}
+            color="bg-blue-500"
           />
         </div>
       </div>

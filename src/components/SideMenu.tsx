@@ -49,11 +49,17 @@ export default function SideMenu({ activeMenu }: SideMenuProps) {
     <div className="w-64 h-[calc(100vh-61px)] bg-white border-r border-gray-200/50 sticky top-[61px] z-20">
       <div className="flex flex-col items-center justify-center mb-7 pt-5">
         <div className="relative p-5">
-          <img
-            src={user?.profileImgUrl || ""}
-            alt="Profile"
-            className="w-20 h-20 rounded-full bg-slate-400 object-cover"
-          />
+          {user?.profileImgUrl ? (
+              <img
+                src={user.profileImgUrl}
+                alt="Profile"
+                className="w-20 h-20 rounded-full bg-slate-400 object-cover"
+              />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-slate-400 flex items-center justify-center text-white font-bold text-xl">
+                {user?.name?.[0] || "?"}
+              </div>
+            )}
         </div>
 
         {user?.role === "admin" && (
