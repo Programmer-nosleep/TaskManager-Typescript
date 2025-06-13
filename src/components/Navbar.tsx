@@ -11,7 +11,7 @@ export default function Navbar({ activeMenu = "" }: NavbarProps) { // default to
   const [openSideMenu, setOpenSideMenu] = useState(false);
 
   return (
-    <div className="flex items-center gap-5 bg-gray-50 border-b border-gray-200/50 backdrop-blur-[2px] py-1 px-7 sticky top-0 z-30">
+    <div className="flex items-center gap-5 bg-white border-b border-gray-200/50 backdrop-blur-[2px] py-1 px-7 sticky top-0 z-30">
       <Button
         className="block lg:hidden text-black cursor-pointer"
         onClick={() => setOpenSideMenu(!openSideMenu)}

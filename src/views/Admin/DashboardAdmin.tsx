@@ -1,12 +1,26 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect } from 'react';
+import moment  from 'moment';
 
 import axiosInstance from '../../utils/axiosInstance';
 import DashboardLayout from '../../components/layout/DashboardLayout';
+import InfoCard from '../../components/Cards/InfoCard';
 
+import { addThousandsSeparator } from '../../utils/helper';
 import { UseUserAuth } from '../../hooks/useUserAuth'
 import { UserContext } from '../../context/userContext';
 import { useNavigate } from 'react-router-dom';
 import { API_PATHS } from '../../utils/ApiPaths';
+
+interface DashboardData {
+  charts: {
+    taskDistribution: {
+      All: number;
+      [key: string]: number;
+    };
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
 
 export default function DashboardAdmin() {
   UseUserAuth();
@@ -18,7 +32,7 @@ export default function DashboardAdmin() {
   const { user } = context;
 
   const navigate = useNavigate();
-  const [dashboarData, setDashboardData] = useState(null);
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [pieChartData, setPieChartData] = useState([]);
   const [barChartData, setBarChartData] = useState([]);
 
@@ -33,7 +47,7 @@ export default function DashboardAdmin() {
     } catch (err: any) {
       console.error(`Error fetching users: ${err}`);
     }
-  }
+  };
 
   useEffect(() => {
     getDashboardData();
@@ -41,11 +55,29 @@ export default function DashboardAdmin() {
     return () => {
 
     };
-  }, [])
+  }, []);
 
   return (
     <DashboardLayout activeMenu='Dashboard'>
-      <h2>Hello,World!</h2>
+      <div className='card my-5'>
+        <div className=''>
+          <div className='col-span-3'>
+            <h2 className='text-xl md:text-2xl font-semibold'>Good Morning! {user?.name}</h2>
+            <p className='text-xs md:text-[13px] text-gray-400 mt-1.5'>
+              {moment().format("dddd Do MMM YYYY")}
+            </p>
+
+          </div>
+        </div>
+
+        <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mt-5'>
+          <InfoCard
+             label="Total Tasks"
+             value={addThousandsSeparator(dashboardData?.charts?.taskDistribution?.All || 0)}
+             color="bg-primary"
+          />
+        </div>
+      </div>
     </DashboardLayout>
   )
 }
