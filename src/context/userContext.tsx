@@ -3,16 +3,15 @@ import type { ReactNode } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/ApiPaths";
 
-// Definisikan tipe user sesuai struktur yang dikembalikan dari API
 interface User {
   id: number;
   name: string;
   email: string;
   token: string;
-  // tambahkan properti lain jika ada
+  role?: "admin" | "member";
+  profileImgUrl?: string;
 }
 
-// Definisikan tipe konteks
 interface UserContextType {
   user: User | null;
   loading: boolean;
@@ -22,7 +21,6 @@ interface UserContextType {
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// Props untuk provider
 interface UserProviderProps {
   children: ReactNode;
 }

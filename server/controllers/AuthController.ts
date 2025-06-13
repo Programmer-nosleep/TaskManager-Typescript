@@ -61,7 +61,7 @@ export const RegisterUser = async (req: Request, res: Response): Promise<void> =
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
-        profileImageUrl: newUser.profileImgUrl,
+        profileImgUrl: newUser.profileImgUrl,
         token: generateToken(newUser.id)
       },
       token,
